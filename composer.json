@@ -1,8 +1,8 @@
 {
     "name":"psecio/invoke",
     "type":"library",
-    "description":"TBD",
-    "keywords":["authentication", "authorization"],
+    "description":"Route Authentication & Authorization Management",
+    "keywords":["authentication", "authorization", "route"],
     "homepage":"https://github.com/psecio/invoke.git",
     "license":"MIT",
     "authors":[
