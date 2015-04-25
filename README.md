@@ -7,7 +7,7 @@ The Invoke system helps you protect your application based on the endpoints and 
 
 "For this endpoint, I want to allow only authenticated users that have the group named 'test' to get through".
 
-Currently Invoke treats all criteris as **AND**s so they must meet **ALL** criteria in order to pass the validation.
+Currently Invoke treats all criteria as **AND**s so they must meet **ALL** criteria in order to pass the validation.
 
 ## Example Usage
 
