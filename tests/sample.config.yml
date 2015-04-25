@@ -1,0 +1,4 @@
+event/add:
+  protected: on
+  groups: [test]
+  permissions: [perm1]
