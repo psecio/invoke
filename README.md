@@ -56,6 +56,38 @@ event/add:
 
 In this example we're telling the system that the `/event/add` route should be protected (only allow authenticated users) and that it requires that the user has the group named "test" and a permission on the user of "testperm1". The system will take in this configuration and automatically parse and handle is accordingly inside the `Enforcer`.
 
+Routes can be simple matches or they can be more complicated regular expressions. For example, if we only wanted to match URLs going to our `/event/view` page with numeric IDs, you could use:
+
+```yaml
+event/view/([0-9]+):
+  protected: on
+  groups: [test]
+  permissions: [testperm1]
+```
+
+This would match a URL like `/event/view/1` but not `/event/view/foo`. The route itself is actually a regular expression. If you're familiar with regular expressions, you'll also notice that there's capturing parentheses in our example. These can be used to gather the matching data from our matcher instance:
+
+```php
+<?php
+$config = array('/event/view/([0-9]+)');
+$uri = '/event/view/1234';
+
+$matcher = new \Psecio\Invoke\Match\Route\Regex($config);
+if ($matcher->evaluate($uri) === true) {
+	$params = $matcher->getParmas();
+}
+?>
+```
+
+This would return the following in `$params`:
+
+```
+Array (
+	[0] => /event/view/1234
+	[1] => 1234
+)
+```
+
 ## Match Types
 
 There are currently several match types in the Invoke system that can be used for evaluation: route matching, group checking and permission checking. You don't need to do anything externally to use these matches - they're generated from the configuration file for you.
@@ -65,5 +97,4 @@ There are currently several match types in the Invoke system that can be used fo
 - `Match/Route/Regex`
 
 There's more of these match types to come...so stay tuned.
-
 
