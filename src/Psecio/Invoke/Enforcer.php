@@ -14,6 +14,12 @@ class Enforcer
 		$this->loadConfig($configPath);
 	}
 
+	/**
+	 * Load the configuration from the given path
+	 *
+	 * @param string $configPath Path to YAML configuration file
+	 * @return array Configuration data set
+	 */
 	public function loadConfig($configPath)
 	{
 		$yaml = new \Symfony\Component\Yaml\Parser();
@@ -26,13 +32,35 @@ class Enforcer
 	}
 
 	/**
+	 * Try to find a route match in the current config set
+	 *
+	 * @param string $uri URI to evaluate
+	 * @param array $config Current route configuration
+	 * @return \Psecio\Invoke\RouteContainer|null Route if found, null if not
+	 */
+	public function findRouteMatch($uri, array $config)
+	{
+		$route = null;
+		foreach ($config as $matchUri => $routeInstance) {
+			echo $matchUri.' - '.print_r($routeInstance, true)."\n";
+
+			$match = \Psecio\Invoke\Match::create('route.regex', ['route' => $matchUri]);
+			if ($match->evaluate($uri) === true) {
+				return $routeInstance;
+			}
+		}
+
+		return $route;
+	}
+
+	/**
 	 * Check to see if the request is authorized
 	 * 	By default, fails closed
 	 *
-	 * @param  \Psecio\Invoke\UserInterface $user     [description]
-	 * @param  \Psecio\Invoke\Resource      $resource [description]
-	 * @param  [type]                       $match    [description]
-	 * @return boolean                                [description]
+	 * @param \Psecio\Invoke\UserInterface $user User instance
+	 * @param \Psecio\Invoke\Resource $resource Resource instance
+	 * @param array $matches Additional matches to add manually for evaluation
+	 * @return boolean Pass/fail of authorization
 	 */
 	public function isAuthorized(
 		\Psecio\Invoke\UserInterface $user, \Psecio\Invoke\Resource $resource, array $matches = array()
@@ -42,22 +70,19 @@ class Enforcer
 		$uri = $resource->getUri();
 		$uri = (strlen($uri) > 1) ? substr($uri, 1) : $uri;
 
-		// See if we have a route match
-		$match = \Psecio\Invoke\Match::create('route.regex', ['route' => $uri]);
-		if ($match->evaluate($uri) === false) {
-			return $this->fail;
-		}
+		// See if we have a route match at all
+		$route = $this->findRouteMatch($uri, $config);
 
-		// If we don't have a configuration for the rotue, allow
-		if (!isset($config[$uri])) {
+		// If we don't have a configuration for the route, allow
+		// 	public resource
+		if ($route === null) {
 			return true;
 		}
 
-		$route = $config[$uri];
 		$config = $route->getConfig();
 
 		// If it's either not marked as protected and if the user is logged in
-		if ($this->isProtected($config) === true && !$user->isAuthed()) {
+		if ($this->isProtected($route) === true && !$user->isAuthed()) {
 			return false;
 		}
 
@@ -93,19 +118,39 @@ class Enforcer
 		return true;
 	}
 
+	/**
+	 * Get the match type of the given object instance
+	 *
+	 * @param object $match Match object instance
+	 * @return string Match type
+	 */
 	public function getMatchType($match)
 	{
 		$ns = explode('\\', get_class($match));
 		return strtolower($ns[3]);
 	}
 
+	/**
+	 * Check to ensure the route exists in the current configuration
+	 * 	One to one string match, not a regex match
+	 *
+	 * @param string $route Route to match
+	 * @return boolean Match found/no match
+	 */
 	public function routeExists($route)
 	{
 		return array_key_exists($route, $this->config);
 	}
 
-	public function isProtected($config)
+	/**
+	 * Evaluate if the endpoint has protection turned on
+	 *
+	 * @param \Psecio\RouteContainer $route Route instance
+	 * @return boolean On/off status of protection
+	 */
+	public function isProtected($route)
 	{
+		$config = $route->getConfig();
 		return (array_key_exists('protected', $config) && $config['protected'] === 'on');
 	}
 }
