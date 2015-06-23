@@ -42,8 +42,6 @@ class Enforcer
 	{
 		$route = null;
 		foreach ($config as $matchUri => $routeInstance) {
-			echo $matchUri.' - '.print_r($routeInstance, true)."\n";
-
 			$match = \Psecio\Invoke\Match::create('route.regex', ['route' => $matchUri]);
 			if ($match->evaluate($uri) === true) {
 				return $routeInstance;
