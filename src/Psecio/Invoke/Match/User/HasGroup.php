@@ -16,7 +16,9 @@ class HasGroup implements \Psecio\Invoke\MatchInterface
 		$groupName = $this->config['name'];
 
 		foreach ($data->getGroups() as $group) {
-			if ($groupName === $group->getName()) {
+			$name = ($group instanceof \Psecio\Invoke\GroupInterface)
+				? $group->getName() : $group;
+			if ($groupName === $name) {
 				return true;
 			}
 		}

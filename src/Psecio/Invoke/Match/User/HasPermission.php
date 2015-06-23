@@ -16,7 +16,9 @@ class HasPermission implements \Psecio\Invoke\MatchInterface
 		$permissionName = $this->config['name'];
 
 		foreach ($data->getPermissions() as $permission) {
-			if ($permissionName === $permission->getName()) {
+			$name = ($permission instanceof \Psecio\Invoke\PermissionInterface)
+				? $permission->getName() : $permission;
+			if ($permissionName === $name) {
 				return true;
 			}
 		}

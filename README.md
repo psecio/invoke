@@ -43,6 +43,22 @@ The Invoke tool assumes a typical RBAC group/permissions setup, but it can be us
 
 - `getName` to return the "name" of the current permission
 
+
+**Optionally** you can just have the `getPermissions` and `getGroups` methods on the `InvokeUser` object retrurn an array of strings instead of sets of `InvokePermission` and `InvokeGroup` respectively. This greatly simplifies the process and requires less overhead for you to implement. For example, instead of making the permission class and returning instances:
+
+```php
+<?php
+class MyGroup implements \Psecio\Invoke\GroupInterface { }
+class MyUser implements \Psecio\Invoke\UserInterface
+{
+  public function getGroups()
+  {
+    return [ new MyGroup(), new MyGroup() ];
+  }
+}
+?>
+```
+
 ## Configuration
 
 The configuration is based on a YAML formatted file. Here's an example structure:
