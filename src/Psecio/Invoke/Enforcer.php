@@ -47,7 +47,6 @@ class Enforcer
 				return $routeInstance;
 			}
 		}
-
 		return $route;
 	}
 
@@ -66,7 +65,6 @@ class Enforcer
 	{
 		$config = $this->config;
 		$uri = $resource->getUri();
-		$uri = (strlen($uri) > 1) ? substr($uri, 1) : $uri;
 
 		// See if we have a route match at all
 		$route = $this->findRouteMatch($uri, $config);

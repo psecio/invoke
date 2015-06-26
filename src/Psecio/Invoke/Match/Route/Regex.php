@@ -19,9 +19,10 @@ class Regex implements \Psecio\Invoke\MatchInterface
 			? $data->getUri() : $data;
 
 		$found = preg_match('#'.$regex.'#', $url, $matches);
-		if ($found >= 1 && isset($matches[1]) && !empty($matches[1])) {
+		if ($found >= 1) {
 			$this->setParams($matches);
 		}
+
 		return ($found >= 1);
 	}
 
