@@ -31,7 +31,7 @@ class RegexTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testValidMatchResource()
 	{
-		$resource = new \Psecio\Invoke\Resource('/foo/bar');
+		$resource = new \Psecio\Invoke\Resource('/foo/bar', 'GET');
 		$config = array('route' => '/foo/bar');
 		$regex = new Regex($config);
 
