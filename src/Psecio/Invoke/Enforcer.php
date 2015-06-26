@@ -96,9 +96,18 @@ class Enforcer
 			}
 		}
 
+		// And methods
+		if (isset($config['methods'])) {
+			foreach ($config['methods'] as $httpMethod) {
+				echo $httpMethod;
+				$matches[] = \Psecio\Invoke\Match::create('resource.hasMethod', ['method' => $httpMethod]);
+			}
+		}
+
 		foreach ($matches as $match) {
 			switch($this->getMatchType($match)) {
 				case 'route':
+				case 'resource':
 					$result = $match->evaluate($resource);
 					break;
 				case 'user':

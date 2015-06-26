@@ -79,6 +79,7 @@ event/view/([0-9]+):
   protected: on
   groups: [test]
   permissions: [testperm1]
+  methods: [get, post]
 ```
 
 This would match a URL like `/event/view/1` but not `/event/view/foo`. The route itself is actually a regular expression. If you're familiar with regular expressions, you'll also notice that there's capturing parentheses in our example. These can be used to gather the matching data from our matcher instance:
@@ -111,6 +112,7 @@ There are currently several match types in the Invoke system that can be used fo
 - `Match/User/HasGroup`
 - `Match/User/HasPermission`
 - `Match/Route/Regex`
+- 'Match/Resource/HasMethod'
 
 There's more of these match types to come...so stay tuned.
 
