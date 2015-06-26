@@ -2,18 +2,17 @@
 
 namespace Psecio\Invoke\Match\User;
 
-class HasGroup implements \Psecio\Invoke\MatchInterface
+class HasGroup extends \Psecio\Invoke\MatchInstance
 {
-	private $config;
-
-	public function __construct(array $config = array(), $negate = false)
-	{
-		$this->config = $config;
-	}
-
+	/**
+	 * Evaluate the group (or name) provided to see if there's a match
+	 *
+	 * @param string|\Psecio\Invoke\GroupInterface $data Group name or instance
+	 * @return boolean Pass/fail status of the evaluation
+	 */
 	public function evaluate($data)
 	{
-		$groupName = $this->config['name'];
+		$groupName = $this->getConfig('name');
 
 		foreach ($data->getGroups() as $group) {
 			$name = ($group instanceof \Psecio\Invoke\GroupInterface)

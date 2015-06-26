@@ -2,18 +2,20 @@
 
 namespace Psecio\Invoke\Match\Resource;
 
-class HasMethod implements \Psecio\Invoke\MatchInterface
+class HasMethod extends \Psecio\Invoke\MatchInstance
 {
-	private $config;
-
-	public function __construct(array $config = array(), $negate = false)
-	{
-		$this->config = $config;
-	}
-
+	/**
+	 * Evaluate the provided resource to see if it's in the allowed
+	 * 	set of HTTP methods
+	 *
+	 * @param \Psecio\Invoke\Resource $data Resource instance
+	 * @return boolean Pass/fail status
+	 */
 	public function evaluate($data)
 	{
-		$httpMethod = strtoupper($data->getHttpMethod());
-		return ($httpMethod === strtoupper($this->config['method']));
+		$httpMethod = ($data instanceof \Psecio\Invoke\Resource)
+			? $data->getHttpMethod() : $data;
+
+		return (strtoupper($httpMethod) === strtoupper($this->getConfig('method')));
 	}
 }

@@ -2,18 +2,18 @@
 
 namespace Psecio\Invoke\Match\User;
 
-class HasPermission implements \Psecio\Invoke\MatchInterface
+class HasPermission extends \Psecio\Invoke\MatchInstance
 {
-	private $config;
-
-	public function __construct(array $config = array(), $negate = false)
-	{
-		$this->config = $config;
-	}
-
+	/**
+	 * Evaluate the provided permission instance (or name) against provided
+	 * 	for a match
+	 *
+	 * @param string|\Psecio\Invoke\PermissionInterface $data Permission data
+	 * @return boolean Pass/fail status of evaluation
+	 */
 	public function evaluate($data)
 	{
-		$permissionName = $this->config['name'];
+		$permissionName = $this->getConfig('name');
 
 		foreach ($data->getPermissions() as $permission) {
 			$name = ($permission instanceof \Psecio\Invoke\PermissionInterface)

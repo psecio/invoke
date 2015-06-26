@@ -2,19 +2,17 @@
 
 namespace Psecio\Invoke\Match\Route;
 
-class Regex implements \Psecio\Invoke\MatchInterface
+class Regex extends \Psecio\Invoke\MatchInstance
 {
-	private $config;
-	private $params = array();
-
-	public function __construct(array $config = array(), $negate = false)
-	{
-		$this->config = $config;
-	}
-
+	/**
+	 * Evaluate the provided resource for a match on the provided URI
+	 *
+	 * @param string|\Psecio\Invoke\Resource $data URI to match against
+	 * @return boolean Pass/fail status
+	 */
 	public function evaluate($data)
 	{
-		$regex = $this->config['route'];
+		$regex = $this->getConfig('route');
 		$url = ($data instanceof \Psecio\Invoke\Resource)
 			? $data->getUri() : $data;
 
@@ -26,10 +24,21 @@ class Regex implements \Psecio\Invoke\MatchInterface
 		return ($found >= 1);
 	}
 
+	/**
+	 * Set the current URI paramaters
+	 *
+	 * @param array $params Paramster set
+	 */
 	public function setParams(array $params)
 	{
 		$this->params = $params;
 	}
+
+	/**
+	 * Get the current parameter set
+	 *
+	 * @return array Parameter set
+	 */
 	public function getParams()
 	{
 		return $this->params;

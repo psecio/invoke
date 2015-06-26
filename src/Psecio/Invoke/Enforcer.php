@@ -42,7 +42,7 @@ class Enforcer
 	{
 		$route = null;
 		foreach ($config as $matchUri => $routeInstance) {
-			$match = \Psecio\Invoke\Match::create('route.regex', ['route' => $matchUri]);
+			$match = Match::create('route.regex', ['route' => $matchUri]);
 			if ($match->evaluate($uri) === true) {
 				return $routeInstance;
 			}
@@ -85,14 +85,14 @@ class Enforcer
 		// Now we set up the matches to evaluate
 		if (isset($config['groups'])) {
 			foreach ($config['groups'] as $group) {
-				$matches[] = \Psecio\Invoke\Match::create('user.hasGroup', ['name' => $group]);
+				$matches[] = Match::create('user.hasGroup', ['name' => $group]);
 			}
 		}
 
 		// And check permissions
 		if (isset($config['permissions'])) {
 			foreach ($config['permissions'] as $permission) {
-				$matches[] = \Psecio\Invoke\Match::create('user.hasPermission', ['name' => $permission]);
+				$matches[] = Match::create('user.hasPermission', ['name' => $permission]);
 			}
 		}
 
@@ -100,7 +100,7 @@ class Enforcer
 		if (isset($config['methods'])) {
 			foreach ($config['methods'] as $httpMethod) {
 				echo $httpMethod;
-				$matches[] = \Psecio\Invoke\Match::create('resource.hasMethod', ['method' => $httpMethod]);
+				$matches[] = Match::create('resource.hasMethod', ['method' => $httpMethod]);
 			}
 		}
 
