@@ -3,6 +3,7 @@ Invoke: Route Permission Management
 
 [![Travis-CI Build Status](https://secure.travis-ci.org/psecio/invoke.png?branch=master)](http://travis-ci.org/psecio/invoke)
 [![Total Downloads](https://img.shields.io/packagist/dt/psecio/invoke.svg?style=flat-square)](https://packagist.org/packages/psecio/invoke)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/psecio/invoke/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/psecio/invoke/?branch=master)
 
 The Invoke system helps you protect your application based on the endpoints and the URI requested. It uses a configuration file (or array of settings) to define the permissions needed to request a resource. For example, it will let you define things like:
 
