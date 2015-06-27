@@ -28,6 +28,7 @@ class Enforcer
 	    foreach ($config as $route => $setup) {
 	        $this->config[$route] = new RouteContainer($route, $setup);
 	    }
+
 	    return $this->config;
 	}
 
@@ -39,6 +40,16 @@ class Enforcer
 	public function getConfig()
 	{
 		return $this->config;
+	}
+
+	/**
+	 * Set the current configuration data
+	 *
+	 * @param array $config Configuration data
+	 */
+	public function setConfig(array $config)
+	{
+		$this->config = $config;
 	}
 
 	/**
@@ -87,7 +98,7 @@ class Enforcer
 
 		$config = $route->getConfig();
 
-		// If it's either not marked as protected and if the user is logged in
+		// If it's marked as protected and if the user is not logged in
 		if ($this->isProtected($route) === true && !$user->isAuthed()) {
 			return false;
 		}
@@ -109,7 +120,6 @@ class Enforcer
 		// And methods
 		if (isset($config['methods'])) {
 			foreach ($config['methods'] as $httpMethod) {
-				echo $httpMethod;
 				$matches[] = Match::create('resource.hasMethod', ['method' => $httpMethod]);
 			}
 		}
