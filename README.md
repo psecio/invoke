@@ -1,4 +1,4 @@
-Invoke: Route Permission Management
+Invoke: Route Authentication/Authorization Management
 ===========
 
 [![Travis-CI Build Status](https://secure.travis-ci.org/psecio/invoke.png?branch=master)](http://travis-ci.org/psecio/invoke)
