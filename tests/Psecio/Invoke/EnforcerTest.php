@@ -15,6 +15,13 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$this->enforcer = new Enforcer(__DIR__.'/../../'.$this->configPath);
 	}
 
+	private function setEnforcerConfig(array $config)
+	{
+		$this->enforcer->setConfig([
+			'test/path' => new RouteContainer('test/path', $config)
+		]);
+	}
+
 	/**
 	 * Test to be sure the configuration is loaded correctly
 	 * 	when the object is created
@@ -98,5 +105,107 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$match = $this->enforcer->findRouteMatch($uri, $config);
 
 		$this->assertTrue($this->enforcer->isProtected($match));
+	}
+
+	/**
+	 * Test that a true is returned when all criteria match on
+	 * 	user, resource and config
+	 */
+	public function testIsAuthorizedValid()
+	{
+		$u = new \stdClass();
+		$u->groups = ['group1', 'test'];
+		$u->authed = true;
+
+		$user = new TestUser($u);
+		$resource = new Resource('/test/path', 'GET');
+
+		// Set our configuration
+		$this->setEnforcerConfig(['protected' => 'on', 'groups' => ['test']]);
+		$this->assertTrue($this->enforcer->isAuthorized($user, $resource));
+	}
+
+	/**
+	 * Test that a public resource fails open
+	 */
+	public function testIsAuthorizedPublic()
+	{
+		$u = new \stdClass();
+		$u->groups = ['group1', 'test'];
+		$u->authed = true;
+
+		$user = new TestUser($u);
+		$resource = new Resource('/test/path', 'GET');
+
+		$this->assertTrue($this->enforcer->isAuthorized($user, $resource));
+	}
+
+	/**
+	 * Test that whan a route is protected and a user is not
+	 * 	authenticated, it returns false
+	 */
+	public function testIsAuthorizedNoAuth()
+	{
+		$u = new \stdClass();
+		$u->authed = false;
+
+		$user = new TestUser($u);
+		$resource = new Resource('/test/path', 'GET');
+
+		// Set our configuration
+		$this->setEnforcerConfig(['protected' => 'on']);
+		$this->assertFalse($this->enforcer->isAuthorized($user, $resource));
+	}
+
+	/**
+	 * Test that the user is allowed (true) when the user has the required
+	 * 	permissions
+	 */
+	public function testIsAuthorizedHasPermissions()
+	{
+		$u = new \stdClass();
+		$u->permissions = ['perm1'];
+		$u->authed = true;
+
+		$user = new TestUser($u);
+		$resource = new Resource('/test/path', 'GET');
+
+		// Set our configuration
+		$this->setEnforcerConfig(['protected' => 'on', 'permissions' => ['perm1']]);
+		$this->assertTrue($this->enforcer->isAuthorized($user, $resource));
+	}
+
+	/**
+	 * Test the evaluation of methods, allowing because the Resource
+	 * 	is GET and the "methods" list includes "get"
+	 */
+	public function testIsAuthorizedHasMethods()
+	{
+		$u = new \stdClass();
+		$u->authed = true;
+
+		$user = new TestUser($u);
+		$resource = new Resource('/test/path', 'GET');
+
+		// Set our configuration
+		$this->setEnforcerConfig(['protected' => 'on', 'methods' => ['get']]);
+		$this->assertTrue($this->enforcer->isAuthorized($user, $resource));
+	}
+
+	/**
+	 * Test a failure where it has criteria to check (besides auth)
+	 * 	and returns a failure
+	 */
+	public function testIsAuthorizedFailure()
+	{
+		$u = new \stdClass();
+		$u->authed = true;
+
+		$user = new TestUser($u);
+		$resource = new Resource('/test/path', 'GET');
+
+		// Set our configuration
+		$this->setEnforcerConfig(['protected' => 'on', 'methods' => ['post']]);
+		$this->assertFalse($this->enforcer->isAuthorized($user, $resource));
 	}
 }

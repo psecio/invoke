@@ -10,14 +10,14 @@ class TestUser implements \Psecio\Invoke\UserInterface
 	}
 	public function getGroups()
 	{
-		return [];
+		return (isset($this->user->groups)) ? $this->user->groups : [];
 	}
 	public function getPermissions()
 	{
-		return [];
+		return (isset($this->user->permissions)) ? $this->user->permissions : [];
 	}
 	public function isAuthed()
 	{
-		return true;
+		return (isset($this->user->authed)) ? $this->user->authed : true;
 	}
 }
