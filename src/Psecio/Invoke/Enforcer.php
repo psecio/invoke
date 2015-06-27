@@ -32,6 +32,16 @@ class Enforcer
 	}
 
 	/**
+	 * Return the current config
+	 *
+	 * @return array Current configuration values
+	 */
+	public function getConfig()
+	{
+		return $this->config;
+	}
+
+	/**
 	 * Try to find a route match in the current config set
 	 *
 	 * @param string $uri URI to evaluate
