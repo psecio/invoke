@@ -33,7 +33,7 @@ class Match
 	{
 		$typeNs = "\\Psecio\\Invoke\\Match";
 		foreach (explode('.', $type) as $part) {
-			$typeNs	.= "\\".ucwords(strtolower($part));
+			$typeNs	.= "\\".ucwords($part);
 		}
 		return $typeNs;
 	}

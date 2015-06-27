@@ -32,7 +32,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
 	{
 		$result = Match::formatNamespace('user.hasGroup');
 		$this->assertEquals(
-			'\Psecio\Invoke\Match\User\Hasgroup',
+			'\Psecio\Invoke\Match\User\HasGroup',
 			$result
 		);
 	}
