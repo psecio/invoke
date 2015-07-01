@@ -12,15 +12,17 @@ class HasGroup extends \Psecio\Invoke\MatchInstance
 	 */
 	public function evaluate($data)
 	{
-		$groupName = $this->getConfig('name');
+		$groups = $this->getConfig('data');
+		$userGroups = $data['user']->getGroups();
 
-		foreach ($data->getGroups() as $group) {
-			$name = ($group instanceof \Psecio\Invoke\GroupInterface)
+		// If any are objects, transform to strings
+		foreach ($userGroups as $index => $group) {
+			$userGroups[$index] = ($group instanceof \Psecio\Invoke\GroupInterface)
 				? $group->getName() : $group;
-			if ($groupName === $name) {
-				return true;
-			}
 		}
-		return false;
+
+		// Find the intersection
+		$match = array_intersect($groups, $userGroups);
+		return (count($match) === count($groups));
 	}
 }

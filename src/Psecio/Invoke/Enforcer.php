@@ -9,6 +9,13 @@ class Enforcer
 	private $config = array();
 	private $fail = false;
 
+	private $options = array(
+		'protected' => 'resource.isProtected',
+		'groups' => 'user.hasGroup',
+		'permissions' => 'user.hasPermission',
+		'methods' => 'resource.hasMethod'
+	);
+
 	public function __construct($configPath)
 	{
 		$this->loadConfig($configPath);
@@ -84,6 +91,7 @@ class Enforcer
 		\Psecio\Invoke\UserInterface $user, \Psecio\Invoke\Resource $resource, array $matches = array()
 	)
 	{
+		$data = ['user' => $user, 'resource' => $resource];
 		$config = $this->config;
 		$uri = $resource->getUri();
 
@@ -98,48 +106,22 @@ class Enforcer
 
 		$config = $route->getConfig();
 
-		// If it's marked as protected and if the user is not logged in
-		if ($this->isProtected($route) === true && !$user->isAuthed()) {
-			return false;
-		}
+		foreach ($config as $index => $option) {
+			if (isset($this->options[$index])) {
+				$found = $this->options[$index];
 
-		// Now we set up the matches to evaluate
-		if (isset($config['groups'])) {
-			foreach ($config['groups'] as $group) {
-				$matches[] = Match::create('user.hasGroup', ['name' => $group]);
-			}
-		}
-
-		// And check permissions
-		if (isset($config['permissions'])) {
-			foreach ($config['permissions'] as $permission) {
-				$matches[] = Match::create('user.hasPermission', ['name' => $permission]);
-			}
-		}
-
-		// And methods
-		if (isset($config['methods'])) {
-			foreach ($config['methods'] as $httpMethod) {
-				$matches[] = Match::create('resource.hasMethod', ['method' => $httpMethod]);
+				// make a match for this type
+				$matches[] = Match::create($found, ['data' => $option]);
 			}
 		}
 
 		foreach ($matches as $match) {
-			switch($this->getMatchType($match)) {
-				case 'route':
-				case 'resource':
-					$result = $match->evaluate($resource);
-					break;
-				case 'user':
-					$result = $match->evaluate($user);
-					break;
-			}
-
-			// If there's a failure, return!
+			$result = $match->evaluate($data);
 			if ($result === false) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 

@@ -13,15 +13,17 @@ class HasPermission extends \Psecio\Invoke\MatchInstance
 	 */
 	public function evaluate($data)
 	{
-		$permissionName = $this->getConfig('name');
+		$permissions = $this->getConfig('data');
+		$userPermissions = $data['user']->getPermissions();
 
-		foreach ($data->getPermissions() as $permission) {
-			$name = ($permission instanceof \Psecio\Invoke\PermissionInterface)
+		// If any are objects, transform to strings
+		foreach ($userPermissions as $index => $permission) {
+			$userPermissions[$index] = ($permission instanceof \Psecio\Invoke\PermissionInterface)
 				? $permission->getName() : $permission;
-			if ($permissionName === $name) {
-				return true;
-			}
 		}
-		return false;
+
+		// Find the intersection
+		$match = array_intersect($permissions, $userPermissions);
+		return (count($match) === count($permissions));
 	}
 }
