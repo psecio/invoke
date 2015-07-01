@@ -4,6 +4,8 @@ namespace Psecio\Invoke\Match\Resource;
 
 class HasMethod extends \Psecio\Invoke\MatchInstance
 {
+	protected $error = 'Mismatch on HTTP method :data';
+
 	/**
 	 * Evaluate the provided resource to see if it's in the allowed
 	 * 	set of HTTP methods

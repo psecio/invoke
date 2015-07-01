@@ -118,3 +118,21 @@ There are currently several match types in the Invoke system that can be used fo
 
 There's more of these match types to come...so stay tuned.
 
+## Failure
+
+if the result of the `isAuthorized` call is `false`, you can query the object to get the error message from the first match that failed:
+
+```php
+<?php
+$en = new \Psecio\Invoke\Enforcer(__DIR__.'/config/routes.yml');
+
+$allowed = $en->isAuthorized(
+    new InvokeUser(array('username' => 'ccornutt')),
+    new \Psecio\Invoke\Resource()
+);
+
+if ($allowed === false) {
+  echo 'ERROR: '.$en->getError();
+}
+?>
+```

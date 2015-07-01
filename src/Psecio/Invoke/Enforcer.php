@@ -8,6 +8,7 @@ class Enforcer
 {
 	private $config = array();
 	private $fail = false;
+	private $error = 'There was an error!';
 
 	private $options = array(
 		'protected' => 'resource.isProtected',
@@ -57,6 +58,26 @@ class Enforcer
 	public function setConfig(array $config)
 	{
 		$this->config = $config;
+	}
+
+	/**
+	 * Get the current error message
+	 *
+	 * @return string Error message
+	 */
+	public function getError()
+	{
+		return $this->error;
+	}
+
+	/**
+	 * Set the current error mesasge
+	 *
+	 * @param string $error Error message
+	 */
+	public function setError($error)
+	{
+		$this->error = $error;
 	}
 
 	/**
@@ -118,6 +139,7 @@ class Enforcer
 		foreach ($matches as $match) {
 			$result = $match->evaluate($data);
 			if ($result === false) {
+				$this->setError($match->getError());
 				return false;
 			}
 		}
