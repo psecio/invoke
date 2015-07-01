@@ -14,7 +14,8 @@ class Enforcer
 		'protected' => 'resource.isProtected',
 		'groups' => 'user.hasGroup',
 		'permissions' => 'user.hasPermission',
-		'methods' => 'resource.hasMethod'
+		'methods' => 'resource.hasMethod',
+		'params' => 'route.hasParameters'
 	);
 
 	public function __construct($configPath)
@@ -93,6 +94,7 @@ class Enforcer
 		foreach ($config as $matchUri => $routeInstance) {
 			$match = Match::create('route.regex', ['route' => $matchUri]);
 			if ($match->evaluate($uri) === true) {
+				$routeInstance->setParams($match->getParams());
 				return $routeInstance;
 			}
 		}
@@ -112,7 +114,7 @@ class Enforcer
 		\Psecio\Invoke\UserInterface $user, \Psecio\Invoke\Resource $resource, array $matches = array()
 	)
 	{
-		$data = ['user' => $user, 'resource' => $resource];
+		$data = ['user' => $user, 'resource' => $resource, 'params' => []];
 		$config = $this->config;
 		$uri = $resource->getUri();
 
@@ -124,7 +126,7 @@ class Enforcer
 		if ($route === null) {
 			return true;
 		}
-
+		$data['route'] = $route;
 		$config = $route->getConfig();
 
 		foreach ($config as $index => $option) {

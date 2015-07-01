@@ -107,6 +107,16 @@ Array (
 )
 ```
 
+Additionally, the routes also support the idea of *placeholders* and *parameters* to do additional checking. To use these placeholders, you use a colon notation in the path and then reference them in a `params` check in the body. For example, say you wanted to only match an event with an ID of 5:
+
+```yaml
+event/view/:id:
+  protected: on
+  params: [id:5]
+```
+
+So, if the user comes to `/event/view/5` (and was logged in), this route would match and the `isAuthorized` call would return `true`.
+
 ## Match Types
 
 There are currently several match types in the Invoke system that can be used for evaluation: route matching, group checking and permission checking. You don't need to do anything externally to use these matches - they're generated from the configuration file for you.
@@ -114,7 +124,9 @@ There are currently several match types in the Invoke system that can be used fo
 - `Match/User/HasGroup`
 - `Match/User/HasPermission`
 - `Match/Route/Regex`
-- 'Match/Resource/HasMethod'
+- `Match/Route/HasParameters`
+- 'Match/Resource/HasMethod`
+- `Match/Resource/IsProtected`
 
 There's more of these match types to come...so stay tuned.
 

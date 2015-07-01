@@ -17,6 +17,12 @@ class RouteContainer
     private $config;
 
     /**
+     * Parameters found in route processing
+     * @var array
+     */
+    private $params = [];
+
+    /**
      * Initialize the container with the provided route and
      *     configuration information
      *
@@ -48,5 +54,25 @@ class RouteContainer
     public function getRoute()
     {
         return $this->route;
+    }
+
+    /**
+     * Set the parameters for the current route match
+     *
+     * @param array $params Parameter set
+     */
+    public function setParams(array $params = array())
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * Get the current parameter set
+     *
+     * @return array Parameter set
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 }

@@ -16,9 +16,32 @@ class Regex extends \Psecio\Invoke\MatchInstance
 		$url = ($data instanceof \Psecio\Invoke\Resource)
 			? $data->getUri() : $data;
 
-		$found = preg_match('#'.$regex.'#', $url, $matches);
+		// Find any placeholders and replace them
+		$split = explode('/', $regex);
+		$placeholders = [];
+		foreach ($split as $index => $item) {
+			if (strpos($item, ':') === 0) {
+				$placeholders[] = str_replace(':', '', $item);
+			}
+		}
+
+		// replace the placeholders for regex location
+		foreach ($placeholders as $item) {
+			$regex = str_replace(':'.$item, '(.+?)', $regex);
+		}
+
+		$found = preg_match('#^'.$regex.'$#', $url, $matches);
 		if ($found >= 1) {
-			$this->setParams($matches);
+			// first one is the URL itself, shift off
+			array_shift($matches);
+			$params = [];
+
+			// Now match up the placeholders
+			foreach ($matches as $index => $match) {
+				$params[$placeholders[$index]] = $match;
+			}
+
+			$this->setParams($params);
 		}
 
 		return ($found >= 1);
