@@ -13,7 +13,7 @@ class HasParameters extends \Psecio\Invoke\MatchInstance
 	 * @param array $data Set of context items (user, resource, route)
 	 * @return boolean Pass/fail status
 	 */
-	public function evaluate(array $data)
+	public function evaluate($data)
 	{
 		$params = $data['route']->getParams();
 		$config = $this->getConfig();

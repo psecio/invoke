@@ -43,7 +43,7 @@ class RegexTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testValidMatchParamaters()
 	{
-		$config = array('route' => '/foo/bar/(.+)');
+		$config = array('route' => '/foo/bar/:id');
 		$regex = new Regex($config);
 
 		$this->assertTrue($regex->evaluate('/foo/bar/baz'));
@@ -51,7 +51,7 @@ class RegexTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(
 			$params,
-			array('/foo/bar/baz', 'baz')
+			array('id' => 'baz')
 		);
 	}
 }

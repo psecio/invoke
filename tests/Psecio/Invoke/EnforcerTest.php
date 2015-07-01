@@ -118,7 +118,7 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$u->authed = true;
 
 		$user = new TestUser($u);
-		$resource = new Resource('/test/path', 'GET');
+		$resource = new Resource('test/path', 'GET');
 
 		// Set our configuration
 		$this->setEnforcerConfig(['protected' => 'on', 'groups' => ['test']]);
@@ -135,7 +135,7 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$u->authed = true;
 
 		$user = new TestUser($u);
-		$resource = new Resource('/test/path', 'GET');
+		$resource = new Resource('test/path', 'GET');
 
 		$this->assertTrue($this->enforcer->isAuthorized($user, $resource));
 	}
@@ -150,7 +150,7 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$u->authed = false;
 
 		$user = new TestUser($u);
-		$resource = new Resource('/test/path', 'GET');
+		$resource = new Resource('test/path', 'GET');
 
 		// Set our configuration
 		$this->setEnforcerConfig(['protected' => 'on']);
@@ -168,7 +168,7 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$u->authed = true;
 
 		$user = new TestUser($u);
-		$resource = new Resource('/test/path', 'GET');
+		$resource = new Resource('test/path', 'GET');
 
 		// Set our configuration
 		$this->setEnforcerConfig(['protected' => 'on', 'permissions' => ['perm1']]);
@@ -185,7 +185,7 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$u->authed = true;
 
 		$user = new TestUser($u);
-		$resource = new Resource('/test/path', 'GET');
+		$resource = new Resource('test/path', 'GET');
 
 		// Set our configuration
 		$this->setEnforcerConfig(['protected' => 'on', 'methods' => ['get']]);
@@ -202,7 +202,7 @@ class EnforcerTest extends \PHPUnit_Framework_TestCase
 		$u->authed = true;
 
 		$user = new TestUser($u);
-		$resource = new Resource('/test/path', 'GET');
+		$resource = new Resource('test/path', 'GET');
 
 		// Set our configuration
 		$this->setEnforcerConfig(['protected' => 'on', 'methods' => ['post']]);
