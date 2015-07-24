@@ -15,7 +15,7 @@ class HasMethod extends \Psecio\Invoke\MatchInstance
 	 */
 	public function evaluate($data)
 	{
-		$resource = $data['resource'];
+		$resource = $data->resource;
 		$httpMethod = ($resource instanceof \Psecio\Invoke\Resource)
 			? $resource->getHttpMethod() : $resource;
 

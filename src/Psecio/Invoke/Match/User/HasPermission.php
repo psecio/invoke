@@ -14,7 +14,7 @@ class HasPermission extends \Psecio\Invoke\MatchInstance
 	public function evaluate($data)
 	{
 		$permissions = $this->getConfig('data');
-		$userPermissions = $data['user']->getPermissions();
+		$userPermissions = $data->user->getPermissions();
 
 		// If any are objects, transform to strings
 		foreach ($userPermissions as $index => $permission) {

@@ -13,8 +13,6 @@ class IsProtected extends \Psecio\Invoke\MatchInstance
 	public function evaluate($data)
 	{
 		$setting = $this->getConfig('data');
-		$user = $data['user'];
-
-		return (strtolower($setting) === 'on' && $user->isAuthed());
+		return (strtolower($setting) === 'on' && $data->user->isAuthed());
 	}
 }

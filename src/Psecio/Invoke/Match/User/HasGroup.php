@@ -13,7 +13,7 @@ class HasGroup extends \Psecio\Invoke\MatchInstance
 	public function evaluate($data)
 	{
 		$groups = $this->getConfig('data');
-		$userGroups = $data['user']->getGroups();
+		$userGroups = $data->user->getGroups();
 
 		// If any are objects, transform to strings
 		foreach ($userGroups as $index => $group) {

@@ -15,7 +15,7 @@ class HasParameters extends \Psecio\Invoke\MatchInstance
 	 */
 	public function evaluate($data)
 	{
-		$params = $data['route']->getParams();
+		$params = $data->route->getParams();
 		$config = $this->getConfig();
 
 		// Ensure all params match exactly

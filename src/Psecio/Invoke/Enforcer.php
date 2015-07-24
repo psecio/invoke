@@ -15,7 +15,8 @@ class Enforcer
 		'groups' => 'user.hasGroup',
 		'permissions' => 'user.hasPermission',
 		'methods' => 'resource.hasMethod',
-		'params' => 'route.hasParameters'
+		'params' => 'route.hasParameters',
+		'callback' => 'object.callback'
 	);
 
 	public function __construct($configPath)
@@ -114,9 +115,11 @@ class Enforcer
 		\Psecio\Invoke\UserInterface $user, \Psecio\Invoke\Resource $resource, array $matches = array()
 	)
 	{
-		$data = ['user' => $user, 'resource' => $resource, 'params' => []];
+		$data = ['user' => $user, 'resource' => $resource];
+		$d = new Data($user, $resource);
+
 		$config = $this->config;
-		$uri = $resource->getUri();
+		$uri = $resource->getUri(true)['path'];
 
 		// See if we have a route match at all
 		$route = $this->findRouteMatch($uri, $config);
@@ -127,6 +130,10 @@ class Enforcer
 			return true;
 		}
 		$data['route'] = $route;
+		$d->setRoute($route);
+
+// print_r($d);
+
 		$config = $route->getConfig();
 
 		foreach ($config as $index => $option) {
@@ -139,7 +146,7 @@ class Enforcer
 		}
 
 		foreach ($matches as $match) {
-			$result = $match->evaluate($data);
+			$result = $match->evaluate($d);
 			if ($result === false) {
 				$this->setError($match->getError());
 				return false;

@@ -69,8 +69,24 @@ class Resource
 	 *
 	 * @return string Current URI setting
 	 */
-	public function getUri()
+	public function getUri($parsed = false)
 	{
-		return $this->uri;
+		return ($parsed === true) ? parse_url($this->uri) : $this->uri;
+	}
+
+	public function getParams()
+	{
+		$result = [];
+		$parse = parse_url($this->uri);
+
+		if (isset($parse['query'])) {
+			$params = explode('&', $parse['query']);
+			foreach ($params as $param) {
+				list($key, $value) = explode('=', $param);
+				$result[$key] = $value;
+			}
+		}
+
+		return $result;
 	}
 }
