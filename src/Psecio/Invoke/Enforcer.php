@@ -115,8 +115,7 @@ class Enforcer
 		\Psecio\Invoke\UserInterface $user, \Psecio\Invoke\Resource $resource, array $matches = array()
 	)
 	{
-		$data = ['user' => $user, 'resource' => $resource];
-		$d = new Data($user, $resource);
+		$data = new Data($user, $resource);
 
 		$config = $this->config;
 		$uri = $resource->getUri(true)['path'];
@@ -129,10 +128,7 @@ class Enforcer
 		if ($route === null) {
 			return true;
 		}
-		$data['route'] = $route;
-		$d->setRoute($route);
-
-// print_r($d);
+		$data->setRoute($route);
 
 		$config = $route->getConfig();
 
@@ -146,7 +142,7 @@ class Enforcer
 		}
 
 		foreach ($matches as $match) {
-			$result = $match->evaluate($d);
+			$result = $match->evaluate($data);
 			if ($result === false) {
 				$this->setError($match->getError());
 				return false;
