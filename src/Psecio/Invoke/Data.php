@@ -41,19 +41,41 @@ class Data
 		return null;
 	}
 
+	/**
+	 * Get the current user instance
+	 *
+	 * @return \Psecio\Invoke\InvokeUser instance
+	 */
 	public function getUser()
 	{
 		return $this->user;
 	}
+
+	/**
+	 * Get the current route information
+	 *
+	 * @return \Psecio\Invoke\RouteContainer instance
+	 */
 	public function getRoute()
 	{
 		return $this->route;
 	}
+
+	/**
+	 * Get the current resource instance
+	 *
+	 * @return \Psecio\Invoke\Resource instance
+	 */
 	public function getResource()
 	{
 		return $this->resource;
 	}
 
+	/**
+	 * Set the current route instance
+	 *
+	 * @param \Psecio\Invoke\RouteContaine $route Instance
+	 */
 	public function setRoute(RouteContainer $route)
 	{
 		$this->route = $route;
