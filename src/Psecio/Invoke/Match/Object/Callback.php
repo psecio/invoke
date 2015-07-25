@@ -6,6 +6,12 @@ class Callback extends \Psecio\Invoke\MatchInstance
 {
 	protected $error = 'Failure returned from callback :data';
 
+	/**
+	 * Execute the provided callback
+	 *
+	 * @param \Psecio\Invoke\Data $data Data object instance
+	 * @return boolean Result of evaluation
+	 */
 	public function evaluate($data)
 	{
 		$config = $data->route->getConfig();
