@@ -127,8 +127,46 @@ There are currently several match types in the Invoke system that can be used fo
 - `Match/Route/HasParameters`
 - 'Match/Resource/HasMethod`
 - `Match/Resource/IsProtected`
+- `Match/Object/Callback`
 
 There's more of these match types to come...so stay tuned.
+
+
+## Callback Match
+
+The `callback` match type allows you to call your own class and method directly and evaluate the result of the check. The method should return a `boolean` value. The method should be defined as static in order to be called correctly. For example:
+
+```yaml
+event/view/:id:
+  protected: on
+  callback: \App\MyUser::checkAccess
+```
+
+Then, in your class:
+
+```php
+<?php
+namespace App;
+
+class MyUser
+{
+  public static checkAccess($data)
+  {
+    $result = false;
+    /* return the result of the evaluation */
+    return $result;
+  }
+}
+?>
+```
+
+The callback should take one parameter, the `$data` value that's an instance of `\Psecio\Invoke\Data`. This object allows you access to:
+
+- the current user (`\Psecio\Invoke\InvokeUser`)
+- resource requested (`\Psecio\Invoke\Resource`)
+- the route that matches (`\Psecio\Invoke\RouteContainer`)
+
+These three things provide the context you'll need to evaluate the request. This information can be accessed through the `$data->user`, `$data->resource` and `$data->route` properties respectively.
 
 ## Failure
 
@@ -148,3 +186,4 @@ if ($allowed === false) {
 }
 ?>
 ```
+
