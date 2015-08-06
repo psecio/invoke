@@ -125,7 +125,7 @@ There are currently several match types in the Invoke system that can be used fo
 - `Match/User/HasPermission`
 - `Match/Route/Regex`
 - `Match/Route/HasParameters`
-- 'Match/Resource/HasMethod`
+- `Match/Resource/HasMethod`
 - `Match/Resource/IsProtected`
 - `Match/Object/Callback`
 
