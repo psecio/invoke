@@ -35,9 +35,11 @@ class Enforcer
 		$yaml = new \Symfony\Component\Yaml\Parser();
 	    $config = $yaml->parse(file_get_contents($configPath));
 
-	    foreach ($config as $route => $setup) {
-	        $this->config[$route] = new RouteContainer($route, $setup);
-	    }
+		if (is_array($config) && !empty($config)) {
+			foreach ($config as $route => $setup) {
+				$this->config[$route] = new RouteContainer($route, $setup);
+			}
+		}
 
 	    return $this->config;
 	}
