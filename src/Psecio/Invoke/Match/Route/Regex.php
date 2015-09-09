@@ -29,7 +29,8 @@ class Regex extends \Psecio\Invoke\MatchInstance
 		foreach ($placeholders as $item) {
 			$regex = str_replace(':'.$item, '(.+?)', $regex);
 		}
-		$found = preg_match('#^'.$regex.'$#', $url, $matches);
+
+		$found = preg_match('#^/?'.$regex.'$#', $url, $matches);
 
 		if ($found >= 1) {
 			// first one is the URL itself, shift off
