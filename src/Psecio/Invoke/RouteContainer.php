@@ -41,9 +41,13 @@ class RouteContainer
      *
      * @return array Configuration set
      */
-    public function getConfig()
+    public function getConfig($name = null)
     {
-        return $this->config;
+        if ($name !== null) {
+            return (isset($this->config[$name])) ? $this->config[$name] : null;
+        } else {
+            return $this->config;
+        }
     }
 
     /**

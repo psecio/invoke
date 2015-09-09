@@ -22,6 +22,12 @@ class Data
 	 */
 	private $route;
 
+	/**
+	 * Current enforcer object
+	 * @var array
+	 */
+	private $enforcer;
+
 	public function __construct(UserInterface $user, $resource, $route = null)
 	{
 		$this->user = $user;
@@ -79,5 +85,25 @@ class Data
 	public function setRoute(RouteContainer $route)
 	{
 		$this->route = $route;
+	}
+
+	/**
+	 * Set the current enforcer object
+	 *
+	 * @param \Psecio\Invoke\Enforcer $enforcer Enforcer object
+	 */
+	public function setEnforcer(\Psecio\Invoke\Enforcer &$enforcer)
+	{
+		$this->enforcer = $enforcer;
+	}
+
+	/**
+	 * Get the current enforcer object
+	 *
+	 * @return object Enforder object
+	 */
+	public function getEnforcer()
+	{
+		return $this->enforcer;
 	}
 }

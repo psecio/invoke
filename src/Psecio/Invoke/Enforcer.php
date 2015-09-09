@@ -16,8 +16,11 @@ class Enforcer
 		'permissions' => 'user.hasPermission',
 		'methods' => 'resource.hasMethod',
 		'params' => 'route.hasParameters',
-		'callback' => 'object.callback'
+		'callback' => 'object.callback',
+		'inherit' => 'internal.inherit'
 	);
+
+	private $matches = [];
 
 	public function __construct($configPath)
 	{
@@ -104,6 +107,25 @@ class Enforcer
 		return $route;
 	}
 
+	public function addMatch(\Psecio\Invoke\RouteContainer $route)
+	{
+		$config = $route->getConfig();
+
+		foreach ($config as $index => $option) {
+			if ($this->isValidOption($index)) {
+				$found = $this->options[$index];
+
+				// make a match for this type
+				$this->matches[] = Match::create($found, ['data' => $option]);
+			}
+		}
+	}
+
+	public function isValidOption($option)
+	{
+		return (isset($this->options[$option])) ? true : false;
+	}
+
 	/**
 	 * Check to see if the request is authorized
 	 * 	By default, fails closed
@@ -118,6 +140,7 @@ class Enforcer
 	)
 	{
 		$data = new Data($user, $resource);
+		$data->setEnforcer($this);
 
 		$config = $this->config;
 		$uri = $resource->getUri(true)['path'];
@@ -131,25 +154,17 @@ class Enforcer
 			return true;
 		}
 		$data->setRoute($route);
+		$this->addMatch($route);
 
-		$config = $route->getConfig();
-
-		foreach ($config as $index => $option) {
-			if (isset($this->options[$index])) {
-				$found = $this->options[$index];
-
-				// make a match for this type
-				$matches[] = Match::create($found, ['data' => $option]);
-			}
-		}
-
-		foreach ($matches as $match) {
+		do {
+			$match = array_pop($this->matches);
 			$result = $match->evaluate($data);
+
 			if ($result === false) {
 				$this->setError($match->getError());
 				return false;
 			}
-		}
+		} while (!empty($this->matches));
 
 		return true;
 	}

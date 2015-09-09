@@ -115,6 +115,26 @@ event/view/:id:
   params: [id:5]
 ```
 
+## Inheritance
+Invoke also includes the concept of inheritance, allowing for the ultimate reuse of evaluation rules. This allows you to set up one route how you'd like it and then just tell other routes to inherit it.
+
+
+> **NOTE:** This inheritance *adds* the checks from the other route, not *replaces*.
+
+This uses the `inherit` and `name` keywords to match the routes togethter. If you don't give a route a name, the library cannot match for inheritance:
+
+```yaml
+event/admin:
+    protected: on
+    groups: [group1]
+    name: event-add
+event/add:
+    inherit: event-add
+```
+
+So, in this example we're telling Invoke that when the user accesses the `event/add` endpoint we want all the checks from `event/admin` to be added to it. In this case it's just that the endpoint is protected and that they're in the group "group1".
+
+
 So, if the user comes to `/event/view/5` (and was logged in), this route would match and the `isAuthorized` call would return `true`.
 
 ## Match Types
