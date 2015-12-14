@@ -137,6 +137,18 @@ So, in this example we're telling Invoke that when the user accesses the `event/
 
 So, if the user comes to `/event/view/5` (and was logged in), this route would match and the `isAuthorized` call would return `true`.
 
+## Recursion
+
+You can also define a sort of grouping of routes using the `recursion` setting. In an average application you might have a `/admin` portion of the site. Instead of having to define every route inside of that portion of the site in the Invoke configuration, you can now use recurision to match anything under a location:
+
+```yaml
+/admin:
+  groups: [admin]
+  recursion: on
+```
+
+This tells Invoke to only allow a user in the group "admin" to access anything under `/admin`. Essentially this is just loosening the regular expression matching to allow for additional paths at the end of the defined setting.
+
 ## Match Types
 
 There are currently several match types in the Invoke system that can be used for evaluation: route matching, group checking and permission checking. You don't need to do anything externally to use these matches - they're generated from the configuration file for you.
@@ -206,4 +218,3 @@ if ($allowed === false) {
 }
 ?>
 ```
-

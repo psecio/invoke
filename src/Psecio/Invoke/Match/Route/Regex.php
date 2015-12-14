@@ -30,7 +30,10 @@ class Regex extends \Psecio\Invoke\MatchInstance
 			$regex = str_replace(':'.$item, '(.+?)', $regex);
 		}
 
-		$found = preg_match('#^/?'.$regex.'$#', $url, $matches);
+		$recurse = $this->getConfig('recurse');
+		$postfix = ($recurse === true) ? '#' : '$#';
+		
+		$found = preg_match('#^/?'.$regex.$postfix, $url, $matches);
 
 		if ($found >= 1) {
 			// first one is the URL itself, shift off

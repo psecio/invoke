@@ -98,7 +98,10 @@ class Enforcer
 	{
 		$route = null;
 		foreach ($config as $matchUri => $routeInstance) {
-			$match = Match::create('route.regex', ['route' => $matchUri]);
+			$instanceConfig = $routeInstance->getConfig();
+			$recurse = (isset($instanceConfig['recurse']) && $instanceConfig['recurse'] == 'on') ? true : false;
+			$match = Match::create('route.regex', ['route' => $matchUri, 'recurse' => $recurse]);
+
 			if ($match->evaluate($uri) === true) {
 				$routeInstance->setParams($match->getParams());
 				return $routeInstance;
