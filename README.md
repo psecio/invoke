@@ -5,6 +5,10 @@ Invoke: Route Authentication/Authorization Management
 [![Total Downloads](https://img.shields.io/packagist/dt/psecio/invoke.svg?style=flat-square)](https://packagist.org/packages/psecio/invoke)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/psecio/invoke/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/psecio/invoke/?branch=master)
 
+## Introduction video
+
+[![Route Protection with Invoke: Introduction](http://img.youtube.com/vi/FvQpwz-l-Yg/0.jpg)](https://youtu.be/FvQpwz-l-Yg)
+
 The Invoke system helps you protect your application based on the endpoints and the URI requested. It uses a configuration file (or array of settings) to define the permissions needed to request a resource. For example, it will let you define things like:
 
 "For this endpoint, I want to allow only authenticated users that have the group named 'test' to get through".
@@ -206,4 +210,3 @@ if ($allowed === false) {
 }
 ?>
 ```
-
